@@ -14,13 +14,11 @@ func (g *game) Update() error {
 
 	switch g.gameState {
 	case titleState:
-		if g.titleUpdate() {
+		if g.titleUpdate() && conn.connected {
 			g.gameState++
 		}
 	case colorSelectState:
-		if g.colorSelectUpdate() {
-			g.gameState++
-		}
+		g.colorSelectUpdate()
 	case playState:
 		g.tokenPosUpdate()
 		var lastXPositionPlayed int
@@ -82,6 +80,7 @@ func (g *game) colorSelectUpdate() bool {
 		if g.p2Color == g.p1Color {
 			g.p2Color = (g.p2Color + 1) % globalNumColor
 		}
+		conn.sendingServer([]byte{2, byte(g.p1Color)})
 		return true
 	}
 

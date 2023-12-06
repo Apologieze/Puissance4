@@ -8,6 +8,8 @@ import (
 	"golang.org/x/image/font/opentype"
 )
 
+var conn connection
+
 // Mise en place des polices d'écritures utilisées pour l'affichage.
 func init() {
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
@@ -39,8 +41,10 @@ func init() {
 
 // Création, paramétrage et lancement du jeu.
 func main() {
-
 	g := game{}
+
+	conn = connection{g: &g}
+	go conn.startingConnection()
 
 	ebiten.SetWindowTitle("Programmation système : projet puissance 4")
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)

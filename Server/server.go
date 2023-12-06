@@ -1,15 +1,17 @@
 package main
 
 import (
-	"bufio"
 	"log"
 	"net"
-	"time"
 )
 
-func main() {
-	var c [2]net.Conn
-	var writer [2]*bufio.Writer
+var c [2]net.Conn
+var buffer [2][]byte
+var state int = titleState
+
+func starting_server() {
+	buffer[0] = make([]byte, 128)
+	buffer[1] = make([]byte, 128)
 
 	log.Println("Attente de connection des joueurs...")
 
@@ -25,10 +27,9 @@ func main() {
 		log.Println("accept error:", err)
 		return
 	}
-	defer c[0].Close()
-	writer[0] = bufio.NewWriter(c[0])
-	writer[0].WriteString("Connection au serveur réussie, tu es le joueur 1\n")
-	writer[0].Flush()
+	//defer c[0].Close()
+
+	_, err = c[0].Write([]byte{0, 1})
 	log.Println("Le client 1 s'est connecté à l'adresse", c[0].RemoteAddr().String())
 
 	c[1], err = listener.Accept()
@@ -36,16 +37,18 @@ func main() {
 		log.Println("accept error:", err)
 		return
 	}
-	defer c[1].Close()
-	writer[1] = bufio.NewWriter(c[1])
-	writer[1] = bufio.NewWriter(c[1])
-	writer[1].WriteString("Connection au serveur réussie, tu es le joueur 2\n")
-	writer[1].Flush()
+	//defer c[1].Close()
+	_, err = c[1].Write([]byte{0, 2})
+	_, err = c[0].Write([]byte{1})
+	_, err = c[1].Write([]byte{1})
 	log.Println("Le client 2 s'est connecté à l'adresse", c[1].RemoteAddr().String())
+	state = colorSelectState
+}
 
-	writer[0].WriteString("Le joueur 2 vient de se connecter\n")
-	writer[0].Flush()
+func main() {
+	starting_server()
 
-	time.Sleep(10 * time.Second)
-	log.Println("Fermerture du serveur automatique")
+	for {
+		update()
+	}
 }
