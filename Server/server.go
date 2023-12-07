@@ -40,7 +40,7 @@ func starting_server() {
 	//defer c[1].Close()
 	_, err = c[1].Write([]byte{0, 2})
 	_, err = c[0].Write([]byte{1})
-	_, err = c[1].Write([]byte{1})
+	//_, err = c[1].Write([]byte{1})
 	log.Println("Le client 2 s'est connecté à l'adresse", c[1].RemoteAddr().String())
 	state = colorSelectState
 }

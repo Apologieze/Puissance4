@@ -80,7 +80,7 @@ func (g *game) colorSelectUpdate() bool {
 		if g.p2Color == g.p1Color {
 			g.p2Color = (g.p2Color + 1) % globalNumColor
 		}
-		conn.sendingServer([]byte{2, byte(g.p1Color)})
+		conn.sending <- []byte{2, byte(g.p1Color)}
 		return true
 	}
 
@@ -107,6 +107,7 @@ func (g *game) p1Update() (int, int) {
 			g.turn = p2Turn
 			lastXPositionPlayed = g.tokenPosition
 			lastYPositionPlayed = yPos
+			conn.sending <- []byte{2, byte(g.tokenPosition)}
 		}
 	}
 	return lastXPositionPlayed, lastYPositionPlayed
@@ -115,13 +116,18 @@ func (g *game) p1Update() (int, int) {
 // Gestion de la position du prochain pion joué par le joueur 2 et
 // du moment où ce pion est joué.
 func (g *game) p2Update() (int, int) {
-	position := rand.Intn(globalNumTilesX)
-	updated, yPos := g.updateGrid(p2Token, position)
-	for ; !updated; updated, yPos = g.updateGrid(p2Token, position) {
-		position = (position + 1) % globalNumTilesX
+	if g.opponentLastPos != -1 {
+		position := g.opponentLastPos
+		updated, yPos := g.updateGrid(p2Token, position)
+		for ; !updated; updated, yPos = g.updateGrid(p2Token, position) {
+			position = (position + 1) % globalNumTilesX
+		}
+		g.turn = p1Turn
+		g.opponentLastPos = -1
+		return position, yPos
+	} else {
+		return -1, -1
 	}
-	g.turn = p1Turn
-	return position, yPos
 }
 
 // Mise à jour de l'état du jeu à l'écran des résultats.
