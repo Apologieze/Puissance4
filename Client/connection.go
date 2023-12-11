@@ -16,7 +16,7 @@ func (c *connection) startingConnection() {
 	c.sending = make(chan []byte, 1)
 	go c.sendingServer()
 	var err error
-	c.conn, err = net.Dial("tcp", "localhost:8080")
+	c.conn, err = net.Dial("tcp", "172.26.82.53:80")
 	if err != nil {
 		log.Println("Dial error:", err)
 		return
