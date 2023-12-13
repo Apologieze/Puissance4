@@ -27,19 +27,19 @@ var (
 	globalGridColor           color.Color = color.NRGBA{R: 119, G: 136, B: 153, A: 255}
 	globalTextColor           color.Color = color.NRGBA{R: 25, G: 25, B: 5, A: 255}
 	globalSelectColor         color.Color = color.NRGBA{R: 25, G: 25, B: 5, A: 255}
-	globalOpponentSelectColor color.Color = color.NRGBA{R: 89, G: 89, B: 89, A: 255}
+	globalOpponentSelectColor color.Color = color.NRGBA{R: 120, G: 120, B: 120, A: 255}
 	smallFont                 font.Face
 	largeFont                 font.Face
 	globalTokenColors         [globalNumColor]color.Color = [globalNumColor]color.Color{
-		color.NRGBA{R: 255, G: 239, B: 213, A: 255},
-		color.NRGBA{R: 60, G: 179, B: 113, A: 255},
-		color.NRGBA{R: 154, G: 205, B: 50, A: 255},
-		color.NRGBA{R: 189, G: 183, B: 107, A: 255},
-		color.NRGBA{R: 255, G: 127, B: 80, A: 255},
-		color.NRGBA{R: 240, G: 128, B: 128, A: 255},
-		color.NRGBA{R: 152, G: 251, B: 152, A: 255},
-		color.NRGBA{R: 221, G: 160, B: 221, A: 255},
-		color.NRGBA{R: 245, G: 255, B: 250, A: 255},
+		color.NRGBA{R: 255, G: 201, B: 54, A: 255},
+		color.NRGBA{R: 0, G: 196, B: 46, A: 255},
+		color.NRGBA{R: 25, G: 252, B: 215, A: 255},
+		color.NRGBA{R: 232, G: 85, B: 0, A: 255},
+		color.NRGBA{R: 226, G: 255, B: 59, A: 255},
+		color.NRGBA{R: 255, G: 0, B: 195, A: 255},
+		color.NRGBA{R: 84, G: 255, B: 101, A: 255},
+		color.NRGBA{R: 168, G: 8, B: 255, A: 255},
+		color.NRGBA{R: 25, G: 40, B: 252, A: 255},
 	}
 	offScreenImage *ebiten.Image
 )
