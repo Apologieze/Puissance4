@@ -1,8 +1,6 @@
 package main
 
 import (
-	"math/rand"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
@@ -14,7 +12,7 @@ func (g *game) Update() error {
 
 	switch g.gameState {
 	case titleState:
-		if g.titleUpdate() && conn.connected {
+		if g.titleUpdate() && g.nbConnectedPlayer == 2 {
 			g.gameState++
 		}
 	case colorSelectState:
@@ -73,15 +71,19 @@ func (g *game) colorSelectUpdate() bool {
 		line = (line - 1 + globalNumColorLine) % globalNumColorLine
 	}
 
-	g.p1Color = line*globalNumColorLine + col
+	newpos := line*globalNumColorLine + col
+	if newpos != g.p1Color {
+		conn.sending <- []byte{3, byte(newpos)}
+	}
+
+	g.p1Color = newpos
 
 	if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
-		g.p2Color = rand.Intn(globalNumColor)
-		if g.p2Color == g.p1Color {
-			g.p2Color = (g.p2Color + 1) % globalNumColor
+		if g.p2SelectedColor != g.p1Color {
+			g.p1SelectedColor = g.p1Color
+			conn.sending <- []byte{2, byte(g.p1SelectedColor)}
+			return true
 		}
-		conn.sending <- []byte{2, byte(g.p1Color)}
-		return true
 	}
 
 	return false

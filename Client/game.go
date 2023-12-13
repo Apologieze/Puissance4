@@ -2,16 +2,19 @@ package main
 
 // Structure de données pour représenter l'état courant du jeu.
 type game struct {
-	playerId        byte
-	opponentLastPos int
-	gameState       int
-	stateFrame      int
-	grid            [globalNumTilesX][globalNumTilesY]int
-	p1Color         int
-	p2Color         int
-	turn            int
-	tokenPosition   int
-	result          int
+	playerId          byte
+	nbConnectedPlayer int
+	opponentLastPos   int
+	gameState         int
+	stateFrame        int
+	grid              [globalNumTilesX][globalNumTilesY]int
+	p1Color           int
+	p1SelectedColor   int
+	p2Color           int
+	p2SelectedColor   int
+	turn              int
+	tokenPosition     int
+	result            int
 }
 
 // Constantes pour représenter la séquence de jeu actuelle (écran titre,

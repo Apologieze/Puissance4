@@ -41,7 +41,7 @@ func init() {
 
 // Création, paramétrage et lancement du jeu.
 func main() {
-	g := game{opponentLastPos: -1}
+	g := game{opponentLastPos: -1, nbConnectedPlayer: 1, p1SelectedColor: -1, p2SelectedColor: -1}
 
 	conn = connection{g: &g}
 	go conn.startingConnection()

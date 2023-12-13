@@ -5,17 +5,31 @@ import (
 	"net"
 )
 
+const (
+	LOCAL = "localhost:8081"
+	VM    = ":80"
+)
+
 var c [2]net.Conn
 var buffer [2][]byte
 var state int = titleState
+var ch1 chan []byte
+var ch2 chan []byte
+var selectedP1Color int
+var selectedP2Color int
 
 func starting_server() {
 	buffer[0] = make([]byte, 128)
 	buffer[1] = make([]byte, 128)
 
+	ch1 = make(chan []byte, 1)
+	ch2 = make(chan []byte, 1)
+
+	selectedP1Color, selectedP2Color = -1, -1
+
 	log.Println("Attente de connection des joueurs...")
 
-	listener, err := net.Listen("tcp", "localhost:8080")
+	listener, err := net.Listen("tcp", LOCAL)
 	if err != nil {
 		log.Println("listen error:", err)
 		return
@@ -48,6 +62,8 @@ func starting_server() {
 func main() {
 	starting_server()
 
+	go updatePlayer(0, ch1)
+	go updatePlayer(1, ch2)
 	for {
 		update()
 	}

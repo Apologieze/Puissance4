@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -31,8 +32,9 @@ func (g game) titleDraw(screen *ebiten.Image) {
 	text.Draw(screen, "Puissance 4 en réseau", largeFont, 90, 150, globalTextColor)
 	text.Draw(screen, "Projet de programmation système", smallFont, 105, 190, globalTextColor)
 	text.Draw(screen, "Année 2023-2024", smallFont, 210, 230, globalTextColor)
+	text.Draw(screen, fmt.Sprintf("Joueurs connecté: %d", g.nbConnectedPlayer), smallFont, 0, 30, globalTextColor)
 
-	if g.stateFrame >= globalBlinkDuration/3 {
+	if g.stateFrame >= globalBlinkDuration/3 && g.nbConnectedPlayer == 2 {
 		text.Draw(screen, "Appuyez sur entrée", smallFont, 210, 500, globalTextColor)
 	}
 }
@@ -48,6 +50,10 @@ func (g game) colorSelectDraw(screen *ebiten.Image) {
 		xPos := (globalNumTilesX-globalNumColorCol)/2 + col
 		yPos := (globalNumTilesY-globalNumColorLine)/2 + line
 
+		if numColor == g.p2Color {
+			vector.DrawFilledCircle(screen, float32(globalTileSize/2+xPos*globalTileSize), float32(globalTileSize+globalTileSize/2+yPos*globalTileSize), globalTileSize/2, globalOpponentSelectColor, true)
+		}
+
 		if numColor == g.p1Color {
 			vector.DrawFilledCircle(screen, float32(globalTileSize/2+xPos*globalTileSize), float32(globalTileSize+globalTileSize/2+yPos*globalTileSize), globalTileSize/2, globalSelectColor, true)
 		}
@@ -59,6 +65,15 @@ func (g game) colorSelectDraw(screen *ebiten.Image) {
 			col = 0
 			line++
 		}
+	}
+
+	if g.p1SelectedColor >= 0 {
+		text.Draw(screen, "Couleur sélectionnée:", smallFont, 130, 600, globalTextColor)
+		vector.DrawFilledCircle(screen, 500, 590, 40, globalTokenColors[g.p1SelectedColor], true)
+	}
+	if g.p2SelectedColor >= 0 {
+		text.Draw(screen, "Couleur de l'adversaire:", smallFont, 140, 600, globalTextColor)
+		vector.DrawFilledCircle(screen, 525, 590, 40, globalTokenColors[g.p2SelectedColor], true)
 	}
 }
 
