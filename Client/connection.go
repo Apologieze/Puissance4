@@ -8,6 +8,7 @@ import (
 const (
 	LOCAL = "localhost:8081"
 	VM    = "172.26.82.53:80"
+	VM2   = "20.56.151.82:80"
 )
 
 type connection struct {
